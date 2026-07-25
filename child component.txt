@@ -1,0 +1,54 @@
+---   APEX CLASS  -----
+
+public class ContactController {
+
+	@AuraEnabled(cacheable=true)
+	public static List<Contact> getCondetails(Id accountId){
+
+		return[SELECT Id,Name,Email FROM Contact
+		WHERE AccountId = :accountId
+		ORDER BY Name ASC];
+	}
+}
+
+
+--------- HTML  FILE  ----------
+
+<template>
+    <lightning-card title = "Contact Details">
+
+        <lightning-datatable
+            key-field = "Id"
+            data = {conList}
+            columns = {columns}>
+        </lightning-datatable>
+
+    </lightning-card>
+</template>
+
+
+---------- JS  FILE  ----------
+
+import { LightningElement,wire,api } from 'lwc';
+import getCondetails from '@salesforce/apex/ContactController.getCondetails';
+
+const columns = [
+    {label : "Name" , fieldName : 'Name'},
+    {label : 'Email' , fieldName : 'Email'}
+]
+export default class ContactWireChild extends LightningElement {
+    
+    @api accountId
+    columns = columns;
+    conList = [];
+
+    @wire(getCondetails,{ accountId: '$accountId' })
+    wireContacts({data,error}){
+        if(data){
+            this.conList = data;
+        }else if(error){
+            console.log(error);
+        }
+    }
+
+}
