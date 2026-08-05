@@ -132,7 +132,7 @@ This project helps understand:
 
 ## 👨‍💻 Author
 
-**Himadri Paul**
+**HIMADRI PAUL**
 
 Salesforce Developer | Apex | LWC | SOQL | JavaScript | Git | GitHub
 
